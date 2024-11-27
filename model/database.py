@@ -1,13 +1,18 @@
+from json import load
 import mysql.connector
 from mysql.connector import Error
-
+from dotenv import load_dotenv
+from os import getenv
+ 
 class Database:
     def __init__(self):
-        self.host= 'localhost'
-        self.user = 'root'
-        self.password = 'admin'
-        self.database = 'vingadores'
-
+        load_dotenv() # carregando as variáveis de ambiente
+        self.host = getenv('BD_HOST')
+        self.user = getenv('BD_USER')
+        self.password = getenv('BD_PSWD')
+        self.database = getenv('BD_DATABASE')
+ 
+ 
     def connect(self):
         try:
             self.connection = mysql.connector.connect(
@@ -16,11 +21,12 @@ class Database:
                 password = self.password,
                 database = self.database
             )
-
-            self.cursos = self.connection.cursor()
-            print('Conexão com o banco de dados realizada com sucesso')
+            self.cursor = self.connection.cursor()
+            print('Conexão com o banco de dados realizadas com sucesso')
         except Error as e:
             print(f'Erro: {e}')
-
+ 
+#Database().connect()
 db = Database()
 db.connect()
+db.disconnect()
